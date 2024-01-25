@@ -19,13 +19,9 @@ type alias Game =
   }
 
 parseGames : List String -> List Game
-parseGames = 
-  [Game { id = 1
-          , draws = [(3, Blue), (4, Red), (1, Red)]
-        }
-   , Game { id = 2
-          , draws = [(1, Blue), (2, Green), (3, Green)]
-          }
+parseGames games = 
+  [Game 1 [(3, Blue), (4, Red), (1, Red)]
+   , Game 2 [(1, Blue), (2, Green), (3, Green)]
   ]
 
 calibrationInput : String
