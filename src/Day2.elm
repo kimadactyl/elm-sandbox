@@ -74,7 +74,13 @@ setMaximums games =
 
 setMaximum : Game -> Game
 setMaximum game =
-  { game | maxGreen = 1, maxRed = 2, maxBlue = 3 }
+  let
+    green = List.filter (\(x, y) -> y == Green) game.draws
+            |> List.head
+            |> Maybe.withDefault(0, Green)
+            |> Tuple.first
+  in
+    { game | maxGreen = green, maxRed = 2, maxBlue = 3 }
 
 
 calibrationInput : String
