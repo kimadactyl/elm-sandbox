@@ -76,6 +76,7 @@ setMaximum : Game -> Game
 setMaximum game =
   let
     green = List.filter (\(x, y) -> y == Green) game.draws
+            -- TODO: Sort list by value
             |> List.head
             |> Maybe.withDefault(0, Green)
             |> Tuple.first
