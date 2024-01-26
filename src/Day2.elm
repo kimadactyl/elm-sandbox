@@ -10,6 +10,8 @@ main =
   |> String.lines
   |> parseGames
   |> setMaximums
+  |> validateGames
+  |> sumValidGames 
   |> Debug.toString
   |> Html.text
 
@@ -75,13 +77,34 @@ setMaximums games =
 setMaximum : Game -> Game
 setMaximum game =
   let
-    green = List.filter (\(x, y) -> y == Green) game.draws
-            -- TODO: Sort list by value
-            |> List.head
-            |> Maybe.withDefault(0, Green)
-            |> Tuple.first
+    green = getMaxColour Green game.draws
+    blue = getMaxColour Blue game.draws
+    red = getMaxColour Red game.draws
   in
-    { game | maxGreen = green, maxRed = 2, maxBlue = 3 }
+    { game | maxGreen = green, maxRed = red, maxBlue = blue }
+
+getMaxColour : Colour -> List (Int, Colour) -> Int
+getMaxColour colour draws =
+  List.filter (\(_, y) -> y == colour) draws
+    -- Sort list by value
+    |> List.sortBy (\(x, _) -> x)
+    -- Reverse to get the highest value
+    |> List.reverse
+    |> List.head
+    |> Maybe.withDefault(0, Green)
+    |> Tuple.first
+
+validateGames : List Game -> List Game
+validateGames games =
+  List.filter (\x -> (x.maxGreen <= greenLimit)) games
+  |> List.filter (\x -> (x.maxRed <= redLimit))
+  |> List.filter (\x -> (x.maxBlue <= blueLimit))
+
+
+sumValidGames : List Game -> Int
+sumValidGames games =
+  List.map (\x -> x.id) games
+  |> List.sum
 
 
 calibrationInput : String
